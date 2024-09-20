@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "integration": "playwright test", 
+    "integration": "playwright test",
     "integration:open": "playwright test --ui",
     "integration:codegen": "playwright codegen"
   },
@@ -14,5 +14,8 @@
   "devDependencies": {
     "@playwright/test": "^1.41.2",
     "@types/node": "^20.11.20"
+  },
+  "dependencies": {
+    "playwright-test": "file:"
   }
 }

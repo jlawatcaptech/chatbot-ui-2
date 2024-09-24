@@ -10,6 +10,9 @@ import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { CapTechSVG } from "@/components/icons/captech-svg"
+import { MsalProvider } from "@azure/msal-react"
+import { msalInstance } from "@/lib/msal/msalConfig"
+import DirectLogin from "@/components/utility/direct-login"
 
 export const metadata: Metadata = {
   title: "Login"

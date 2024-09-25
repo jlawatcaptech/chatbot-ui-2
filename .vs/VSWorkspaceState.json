@@ -2,8 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\app\\auth\\callback",
-    "\\app\\[locale]",
-    "\\app\\[locale]\\login",
+    "\\app\\login",
     "\\db",
     "\\lib\\msal",
     "\\supabase",

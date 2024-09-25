@@ -189,7 +189,6 @@ export const WorkspaceSwitcher: FC<WorkspaceSwitcherProps> = ({}) => {
                   !workspace.is_home &&
                   workspace.name.toLowerCase().includes(search.toLowerCase())
               )
-              .sort((a, b) => a.name.localeCompare(b.name))
               .map(workspace => {
                 const image = workspaceImages.find(
                   image => image.workspaceId === workspace.id

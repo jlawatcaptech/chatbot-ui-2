@@ -30,9 +30,7 @@ export default function ChatPage() {
         <div className="relative flex h-full flex-col items-center justify-center">
           <div className="top-50% left-50% -translate-x-50% -translate-y-50% absolute mb-20"></div>
 
-          <div className="absolute left-2 top-2">
-            <QuickSettings />
-          </div>
+          <div className="absolute left-2 top-2">{/* <QuickSettings /> */}</div>
 
           <div className="absolute right-2 top-2">
             <ChatSettings />
@@ -45,7 +43,7 @@ export default function ChatPage() {
           </div>
 
           <div className="absolute bottom-2 right-2 hidden md:block lg:bottom-4 lg:right-4">
-            <ChatHelp />
+            {/* <ChatHelp /> */}
           </div>
         </div>
       ) : (

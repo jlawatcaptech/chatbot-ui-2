@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useMsal } from "@azure/msal-react"
 import { useRouter } from "next/navigation"
 import { msalInstance } from "@/lib/msal/msalConfig"
+import Cookies from "universal-cookie"
 
 const DirectLogin = () => {
   const { instance } = useMsal()
@@ -27,6 +28,13 @@ const DirectLogin = () => {
           const response = await instance.handleRedirectPromise()
           if (response) {
             // Successful login
+            // Store the authentication state in cookies
+
+            const cookies = new Cookies()
+            cookies.set("msalAccount", JSON.stringify(response.account), {
+              path: "/"
+            })
+
             router.push("/login")
           } else {
             // Initiate login if no response

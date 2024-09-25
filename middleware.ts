@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/middleware"
 import { NextResponse, type NextRequest } from "next/server"
 import { msalInstance } from '@/lib/msal/msalConfig';
+import Cookies from 'universal-cookie';
 
 export async function middleware(request: NextRequest) {
 
@@ -30,19 +31,25 @@ export async function middleware(request: NextRequest) {
 
     // MSAL Authentication Logic
     console.log("Middleware: MSAL")
+
+       // Retrieve MSAL account from cookies
+       const cookies = new Cookies(request.headers.get('cookie'));
+       const msalAccountCookie = cookies.get('msalAccount');
+       const msalAccount = msalAccountCookie ? JSON.parse(msalAccountCookie) : null;
+   
     const accounts = msalInstance.getAllAccounts();
 
 
     // If the user is authenticated, allow access to the /login page
     console.log(`IF: 
       PATHNAME: ${request.nextUrl.pathname} 
-      ACCOUNT Len: ${accounts.length}` )
-    if (request.nextUrl.pathname === "/login" && accounts.length > 0) {
+      ACCOUNT : ${msalAccount}` )
+    if (request.nextUrl.pathname === "/login" && msalAccount) {
       
       console.log(`Middleware: entered IF` )
       return NextResponse.next();
     }
-    else if (request.nextUrl.pathname === "/login" && accounts.length == 0)
+    else if (request.nextUrl.pathname === "/login" && !msalAccount)
     {
       console.log(`Middleware: entered ELSE IF` )      
         return NextResponse.rewrite(new URL('/error', request.url));

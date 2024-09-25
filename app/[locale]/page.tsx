@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { MsalProvider } from "@azure/msal-react"
 import { msalInstance } from "@/lib/msal/msalConfig"
-import DirectLogin from "@/components/utility/direct-login"
+import DirectLogin from "@/components/direct-login"
 
 export default function HomePage() {
   const { theme } = useTheme()

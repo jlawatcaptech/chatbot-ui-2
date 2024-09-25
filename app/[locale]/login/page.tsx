@@ -12,7 +12,8 @@ import { redirect } from "next/navigation"
 import { CapTechSVG } from "@/components/icons/captech-svg"
 import { MsalProvider } from "@azure/msal-react"
 import { msalInstance } from "@/lib/msal/msalConfig"
-import DirectLogin from "@/components/utility/direct-login"
+import DirectLogin from "@/components/direct-login"
+import ProtectedRoute from "@/components/protected-route"
 
 export const metadata: Metadata = {
   title: "Login"

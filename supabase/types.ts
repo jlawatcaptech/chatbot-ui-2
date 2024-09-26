@@ -34,6 +34,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      messages_content_length: {
+        Row: {
+          chatid: string
+          user_id: string
+          content_length: number
+        }
+        Insert: {
+          chatid: string
+          user_id: string
+          content_length: number
+        }
+        Update: {
+          chatid?: string
+          user_id?: string
+          content_length?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_content_length_chatid_fkey"
+            columns: ["chatid"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_content_length_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assistant_collections: {
         Row: {
           assistant_id: string

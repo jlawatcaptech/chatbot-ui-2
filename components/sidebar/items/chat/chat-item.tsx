@@ -11,6 +11,8 @@ import { useParams, useRouter } from "next/navigation"
 import { FC, useContext, useRef } from "react"
 import { DeleteChat } from "./delete-chat"
 import { UpdateChat } from "./update-chat"
+import useContentLength from "@/components/chat/chat-hooks/use-chat-content-length"
+import useTokenCount from "@/components/chat/chat-hooks/use-chat-tokens"
 
 interface ChatItemProps {
   chat: Tables<"chats">
@@ -28,6 +30,17 @@ export const ChatItem: FC<ChatItemProps> = ({ chat }) => {
   const router = useRouter()
   const params = useParams()
   const isActive = params.chatid === chat.id || selectedChat?.id === chat.id
+
+  console.log(`ChatID: ${chat.id}`) // Server Side Component, output in browser dev console
+
+  const { content_length, error } = useContentLength(chat.id, chat.user_id)
+  const tokenCount = content_length ? content_length / 4 : 0
+  //const tokenCount = useTokenCount(content_length?.valueOf.toString() || ''); // Call the custom hook here
+  console.log(`ChatItem Tokecount: ${tokenCount}`) // Server Side Component, output in browser dev console
+
+  if (error) {
+    console.error(`Error fetching content length: ${error}`)
+  }
 
   const itemRef = useRef<HTMLDivElement>(null)
 
@@ -92,6 +105,9 @@ export const ChatItem: FC<ChatItemProps> = ({ chat }) => {
 
       <div className="ml-3 flex-1 truncate text-sm font-semibold">
         {chat.name}
+        <div className="text-muted-foreground text-xs">
+          Token Value: {Math.ceil(tokenCount)}
+        </div>
       </div>
 
       <div

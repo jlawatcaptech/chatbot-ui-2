@@ -31,7 +31,7 @@ export const usePromptAndCommand = () => {
   } = useContext(ChatbotUIContext)
 
   const tokenCount = useTokenCount(userInput) // Call the custom hook here
-  console.debug(`Tokecount: ${tokenCount}`)
+  //console.debug(`Tokecount: ${tokenCount}`) // Server Side Component, output in browser dev console
   const handleInputChange = (value: string) => {
     const atTextRegex = /@([^ ]*)$/
     const slashTextRegex = /\/([^ ]*)$/

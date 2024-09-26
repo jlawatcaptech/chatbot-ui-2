@@ -6,6 +6,7 @@ import { getCollectionFilesByCollectionId } from "@/db/collection-files"
 import { Tables } from "@/supabase/types"
 import { LLMID } from "@/types"
 import { useContext } from "react"
+import useTokenCount from "@/components/chat/chat-hooks/use-chat-tokens"
 
 export const usePromptAndCommand = () => {
   const {
@@ -29,6 +30,8 @@ export const usePromptAndCommand = () => {
     setChatFiles
   } = useContext(ChatbotUIContext)
 
+  const tokenCount = useTokenCount(userInput) // Call the custom hook here
+  console.debug(`Tokecount: ${tokenCount}`)
   const handleInputChange = (value: string) => {
     const atTextRegex = /@([^ ]*)$/
     const slashTextRegex = /\/([^ ]*)$/

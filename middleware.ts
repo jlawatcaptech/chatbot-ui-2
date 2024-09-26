@@ -30,34 +30,22 @@ export async function middleware(request: NextRequest) {
     }
 
     // MSAL Authentication Logic
-    console.log("Middleware: MSAL")
-
-       // Retrieve MSAL account from cookies
-       const cookies = new Cookies(request.headers.get('cookie'));
-       const msalAccountCookie = cookies.get('msalAccount');
-       const msalAccount = msalAccountCookie ? JSON.parse(msalAccountCookie) : null;
+    // Retrieve MSAL account from cookies
+    const cookies = new Cookies(request.headers.get('cookie'));
+    const msalAccountCookie = cookies.get('msalAccount');
+    const msalAccount = msalAccountCookie ? JSON.parse(msalAccountCookie) : null;
    
-    const accounts = msalInstance.getAllAccounts();
-
 
     // If the user is authenticated, allow access to the /login page
-    console.log(`IF: 
-      PATHNAME: ${request.nextUrl.pathname} 
-      ACCOUNT : ${msalAccount}` )
     if (request.nextUrl.pathname === "/login" && msalAccount) {
-      
-      console.log(`Middleware: entered IF` )
       return NextResponse.next();
     }
     else if (request.nextUrl.pathname === "/login" && !msalAccount)
     {
-      console.log(`Middleware: entered ELSE IF` )      
         return NextResponse.rewrite(new URL('/error', request.url));
       
     }
     
-    
-    console.log(`Middleware: default response` )
     return response;
   } catch (e) {
     return NextResponse.next({

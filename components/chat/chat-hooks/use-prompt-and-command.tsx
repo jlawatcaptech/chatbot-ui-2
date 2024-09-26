@@ -188,6 +188,7 @@ export const usePromptAndCommand = () => {
     handleSelectUserFile,
     handleSelectUserCollection,
     handleSelectTool,
-    handleSelectAssistant
+    handleSelectAssistant,
+    tokenCount
   }
 }

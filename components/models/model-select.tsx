@@ -161,7 +161,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({
               .filter(model =>
                 model.modelName.toLowerCase().includes(search.toLowerCase())
               )
-              .sort((a, b) => a.provider.localeCompare(b.provider))
 
             if (filteredModels.length === 0) return null
 

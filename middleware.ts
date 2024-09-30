@@ -1,11 +1,9 @@
 import { createClient } from "@/lib/supabase/middleware"
-import { i18nRouter } from "next-i18n-router"
 import { NextResponse, type NextRequest } from "next/server"
-import i18nConfig from "./i18nConfig"
+import { msalInstance } from '@/lib/msal/msalConfig';
+import Cookies from 'universal-cookie';
 
 export async function middleware(request: NextRequest) {
-  const i18nResult = i18nRouter(request, i18nConfig)
-  if (i18nResult) return i18nResult
 
   try {
     const { supabase, response } = createClient(request)
@@ -31,7 +29,24 @@ export async function middleware(request: NextRequest) {
       )
     }
 
-    return response
+    // MSAL Authentication Logic
+    // Retrieve MSAL account from cookies
+    const cookies = new Cookies(request.headers.get('cookie'));
+    const msalAccountCookie = cookies.get('msalAccount');
+    const msalAccount = msalAccountCookie ? JSON.parse(msalAccountCookie) : null;
+   
+
+    // If the user is authenticated, allow access to the /login page
+    if (request.nextUrl.pathname === "/login" && msalAccount) {
+      return NextResponse.next();
+    }
+    else if (request.nextUrl.pathname === "/login" && !msalAccount)
+    {
+        return NextResponse.rewrite(new URL('/error', request.url));
+      
+    }
+    
+    return response;
   } catch (e) {
     return NextResponse.next({
       request: {

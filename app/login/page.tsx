@@ -1,4 +1,4 @@
-import { Brand } from "@/components/ui/brand"
+//import { Brand } from "@/components/ui/brand"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SubmitButton } from "@/components/ui/submit-button"
@@ -9,6 +9,9 @@ import { get } from "@vercel/edge-config"
 import { Metadata } from "next"
 import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
+import { CapTechSVG } from "@/components/icons/captech-svg"
+import { MsalProvider } from "@azure/msal-react"
+import { msalInstance } from "@/lib/msal/msalConfig"
 
 export const metadata: Metadata = {
   title: "Login"
@@ -167,8 +170,9 @@ export default async function Login({
         className="animate-in text-foreground flex w-full flex-1 flex-col justify-center gap-2"
         action={signIn}
       >
-        <Brand />
-
+        <div>
+          <CapTechSVG theme="dark" scale={0.3} />
+        </div>
         <Label className="text-md mt-4" htmlFor="email">
           Email
         </Label>

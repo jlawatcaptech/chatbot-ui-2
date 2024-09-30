@@ -161,6 +161,8 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
       }
     }
   }
+  const { handleInputChange: handlePromptInputChange, tokenCount } =
+    usePromptAndCommand()
 
   return (
     <>
@@ -216,42 +218,42 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
           <ChatCommandInput />
         </div>
 
-        <>
-          <IconCirclePlus
-            className="absolute bottom-[12px] left-3 cursor-pointer p-1 hover:opacity-50"
-            size={32}
-            onClick={() => fileInputRef.current?.click()}
-          />
-
-          {/* Hidden input to select files from device */}
-          <Input
-            ref={fileInputRef}
-            className="hidden"
-            type="file"
-            onChange={e => {
-              if (!e.target.files) return
-              handleSelectDeviceFile(e.target.files[0])
-            }}
-            accept={filesToAccept}
-          />
-        </>
-
-        <TextareaAutosize
-          textareaRef={chatInputRef}
-          className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-          placeholder={t(
-            // `Ask anything. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
-            `Ask anything. Type @  /  #  !`
-          )}
-          onValueChange={handleInputChange}
-          value={userInput}
-          minRows={1}
-          maxRows={18}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onCompositionStart={() => setIsTyping(true)}
-          onCompositionEnd={() => setIsTyping(false)}
+        <IconCirclePlus
+          className="absolute bottom-[12px] left-3 cursor-pointer p-1 hover:opacity-50"
+          size={32}
+          onClick={() => fileInputRef.current?.click()}
         />
+
+        {/* Hidden input to select files from device */}
+        <Input
+          ref={fileInputRef}
+          className="hidden"
+          type="file"
+          onChange={e => {
+            if (!e.target.files) return
+            handleSelectDeviceFile(e.target.files[0])
+          }}
+          accept={filesToAccept}
+        />
+
+        <div className="flex w-full items-center pr-20">
+          <TextareaAutosize
+            textareaRef={chatInputRef}
+            className="ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring text-md flex w-full resize-none rounded-md border-none bg-transparent px-14 py-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            placeholder={t(
+              // `Ask anything. Type "@" for assistants, "/" for prompts, "#" for files, and "!" for tools.`
+              `Ask anything. Type @  /  #  !`
+            )}
+            onValueChange={handlePromptInputChange}
+            value={userInput}
+            minRows={1}
+            maxRows={18}
+            onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
+            onCompositionStart={() => setIsTyping(true)}
+            onCompositionEnd={() => setIsTyping(false)}
+          />
+        </div>
 
         <div className="absolute bottom-[14px] right-3 cursor-pointer hover:opacity-50">
           {isGenerating ? (
@@ -261,18 +263,22 @@ export const ChatInput: FC<ChatInputProps> = ({}) => {
               size={30}
             />
           ) : (
-            <IconSend
-              className={cn(
-                "bg-primary text-secondary rounded p-1",
-                !userInput && "cursor-not-allowed opacity-50"
-              )}
-              onClick={() => {
-                if (!userInput) return
-
-                handleSendMessage(userInput, chatMessages, false)
-              }}
-              size={30}
-            />
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">
+                {tokenCount} {tokenCount == 1 ? "Token" : "Tokens"}
+              </span>
+              <IconSend
+                className={cn(
+                  "bg-primary text-secondary rounded p-1",
+                  !userInput && "cursor-not-allowed opacity-50"
+                )}
+                onClick={() => {
+                  if (!userInput) return
+                  handleSendMessage(userInput, chatMessages, false)
+                }}
+                size={30}
+              />
+            </div>
           )}
         </div>
       </div>

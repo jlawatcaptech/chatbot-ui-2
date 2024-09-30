@@ -34,6 +34,29 @@ export type Database = {
   }
   public: {
     Tables: {
+      messages_token_value: {
+        Row: {
+            chat_id: string
+            token_value: number 
+        }
+        Insert: {
+            chat_id: string
+            token_value: number
+        }
+        Update: {
+            chat_id?: string
+            token_value?: number
+        }
+        // Relationships: [
+        //     {
+        //         foreignKeyName: "messages_token_value_chat_id_fkey"
+        //         columns: ["chat_id"]
+        //         isOneToOne: false
+        //         referencedRelation: "chats"
+        //         referencedColumns: ["id"]
+        //     },
+        // ]
+    }
       assistant_collections: {
         Row: {
           assistant_id: string

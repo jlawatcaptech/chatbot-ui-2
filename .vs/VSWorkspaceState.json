@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app\\auth\\callback",
+    "\\app\\login",
+    "\\db",
+    "\\lib\\msal",
+    "\\supabase",
+    "\\supabase\\migrations"
+  ],
+  "SelectedNode": "\\db\\collections.ts",
+  "PreviewInSolutionExplorer": false
+}

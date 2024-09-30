@@ -4,13 +4,14 @@ import { createChatFiles } from "@/db/chat-files"
 import { createChat } from "@/db/chats"
 import { createMessageFileItems } from "@/db/message-file-items"
 import { createMessages, updateMessage } from "@/db/messages"
+import { upsertMessageTokenValue } from "@/db/messages_token_value"
 import { uploadMessageImage } from "@/db/storage/message-images"
 import {
   buildFinalMessages,
   adaptMessagesForGoogleGemini
 } from "@/lib/build-prompt"
 import { consumeReadableStream } from "@/lib/consume-stream"
-import { Tables, TablesInsert } from "@/supabase/types"
+import { Tables, TablesInsert, TablesUpdate } from "@/supabase/types"
 import {
   ChatFile,
   ChatMessage,
@@ -22,6 +23,7 @@ import {
 import React from "react"
 import { toast } from "sonner"
 import { v4 as uuidv4 } from "uuid"
+import { get_encoding } from "tiktoken"
 
 export const validateChatSettings = (
   chatSettings: ChatSettings | null,
@@ -208,9 +210,12 @@ export const handleHostedChat = async (
 
   let draftMessages = await buildFinalMessages(payload, profile, chatImages)
 
-  let formattedMessages : any[] = []
+  let formattedMessages: any[] = []
   if (provider === "google") {
-    formattedMessages = await adaptMessagesForGoogleGemini(payload, draftMessages)
+    formattedMessages = await adaptMessagesForGoogleGemini(
+      payload,
+      draftMessages
+    )
   } else {
     formattedMessages = draftMessages
   }
@@ -401,6 +406,34 @@ export const handleCreateMessages = async (
   setChatImages: React.Dispatch<React.SetStateAction<MessageImage[]>>,
   selectedAssistant: Tables<"assistants"> | null
 ) => {
+  //// TOKEN AREA
+
+  // Token calculation logic
+  const calculateTokens = (message: string, model: string) => {
+    const encoding = get_encoding("cl100k_base") // GPT4
+    const tokens = encoding.encode(message)
+    return tokens.length
+  }
+
+  // Token calculation for user input and assistant's response
+  const userMessageTokens = calculateTokens(messageContent, modelData.modelId)
+  const assistantMessageTokens = calculateTokens(
+    generatedText,
+    modelData.modelId
+  )
+  const totalMessageTokens = userMessageTokens + assistantMessageTokens
+
+  // console.log(`User input tokens: ${userMessageTokens}`)
+  // console.log(`Assistant response tokens: ${assistantMessageTokens}`)
+  // console.log(`Assistant + User tokens: ${totalMessageTokens}`)
+
+  const updatedMessage = await upsertMessageTokenValue(
+    currentChat.id,
+    totalMessageTokens
+  )
+
+  //// LEAVING TOKEN AREA
+
   const finalUserMessage: TablesInsert<"messages"> = {
     chat_id: currentChat.id,
     assistant_id: null,

@@ -94,7 +94,7 @@ BEGIN
         'Home',
         4096,
         'gpt-4-turbo-preview', -- Updated default model
-        'You are a friendly, helpful AI assistant.',
+        'You are a coding assistant for software development. You do not always provide introductory text but will do so when it adds clarification value. You determine when your responses might have too many assumptions and will prioritize asking questions before answering so you can provide the highest accuracy output possible.',
         0.5,
         'My home workspace.',
         'openai',

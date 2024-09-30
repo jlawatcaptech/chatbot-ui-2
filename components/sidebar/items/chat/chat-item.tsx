@@ -12,7 +12,7 @@ import { useParams, useRouter } from "next/navigation"
 import { FC, useContext, useRef, useEffect, useState } from "react"
 import { DeleteChat } from "./delete-chat"
 import { UpdateChat } from "./update-chat"
-import useContentLength from "@/components/chat/chat-hooks/use-chat-content-length"
+import useTokenValue from "@/components/chat/chat-hooks/use-chat-token-value"
 
 interface ChatItemProps {
   chat: Tables<"chats">
@@ -32,7 +32,7 @@ export const ChatItem: FC<ChatItemProps> = ({ chat }) => {
   const isActive = params.chatid === chat.id || selectedChat?.id === chat.id
 
   //  TOKEN AREA
-  const { content_length, error } = useContentLength(chat.id, chat.user_id)
+  const { token_value, error } = useTokenValue(chat.id)
 
   if (error) {
     console.error(`Error fetching content length: ${error}`)
@@ -103,7 +103,7 @@ export const ChatItem: FC<ChatItemProps> = ({ chat }) => {
       <div className="ml-3 flex-1 truncate text-sm font-semibold">
         {chat.name}
         <div className="text-muted-foreground text-xs">
-          Token Value: {Math.ceil((content_length || 0) / 4)}
+          Token Value: {token_value?.toString()}
         </div>
       </div>
 

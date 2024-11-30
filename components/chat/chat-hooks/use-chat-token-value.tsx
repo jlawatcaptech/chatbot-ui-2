@@ -53,7 +53,7 @@ const useTokenValue = (chat_id: string): TokenValue => {
     const intervalId = setInterval(fetchTokenValue, 5000)
 
     return () => {
-      console.log("Cleaning up interval")
+      //console.log("Cleaning up interval")
       clearInterval(intervalId)
     }
   }, [chat_id]) // Only rerun if chat_id  changes
